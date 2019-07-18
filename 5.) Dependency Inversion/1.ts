@@ -2,9 +2,11 @@ interface IMessage {
   service: 'sms' | 'email'
   content: string
 }
+
 interface IEmailService {
   send(message: IMessage): Promise<void>;
 }
+
 interface ISMSService {
   send(message: IMessage): Promise<void>;
 }

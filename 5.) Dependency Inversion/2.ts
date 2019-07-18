@@ -1,28 +1,32 @@
-interface IMessage {
-  service: "sms" | "email";
-  content: string;
-}
-interface IService {
-  send(message: IMessage): Promise<void>;
+// Classes implementing IMessage and IService can use NotificationService privately or publicly.
+enum NotificationService {
+  SMS = 'SMS',
+  EMAIL = 'EMAIL'
 }
 
-interface INotificationService {
-  chooseService(message: IMessage): IService;
+// IMessage doesn't
+interface IMessage {
+  service: NotificationService
+  content: string
+}
+
+interface IService {
+  send(message: IMessage): Promise<void>;
+  canSend(message: IMessage): Boolean;
 }
 
 export class Notification {
-  service: INotificationService;
+  services: IService[]
 
-  constructor(args: { service: INotificationService }) {
-    this.service = args.service;
+  constructor(args: { services: IService[] }) {
+    this.services = args.services;
   }
 
   async send(message: IMessage) {
     // Send to correct service
-    const service = this.chooseService(message);
-    await service.send(message);
-  }
-  private chooseService(message: IMessage) {
-    return this.service.chooseService(message);
+    const serviceCalls: Promise<void>[] = this.services
+    .map(service => service.send(message))
+
+    await Promise.all(serviceCalls);
   }
 }
