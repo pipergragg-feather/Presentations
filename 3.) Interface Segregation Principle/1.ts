@@ -1,5 +1,8 @@
+// Let's define a single interface for our services so Notification can forget their names too.
+// It's an easy way to make Notification dumber.
+
 interface IMessage {
-    service: "sms" | "email"
+  service: 'sms' | 'email';
 }
 class EmailService {
   async send(message: IMessage): Promise<void> {

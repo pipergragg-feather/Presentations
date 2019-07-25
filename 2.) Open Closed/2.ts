@@ -1,9 +1,20 @@
-class Message {
-  private thankYouMessage = "\nThank you for choosing our company!";
+// Notification knows about a concrete class (Message).
 
-  service: "sms" | "email";
+// Message will grow to contain way too many pieces of
+// information that Notification doesn't need to know about.
+
+// To work with Notification, you have to know about Message.
+// Notification is thus still too smart for its own good.
+
+// To fix this, we'll define the smallest possible interface that Notification requires of Message, and use that instead.
+// Then Notification can forget that Message even exists, and get even dumber.
+
+class Message {
+  private thankYouMessage = '\nThank you for choosing our company!';
+
+  service: 'sms' | 'email';
   content: string;
-  constructor(service: "sms" | "email", content: string) {
+  constructor(service: 'sms' | 'email', content: string) {
     this.service = service;
     this.content = content;
     this.format();
